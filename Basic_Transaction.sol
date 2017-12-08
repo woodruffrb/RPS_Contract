@@ -1,14 +1,17 @@
-pragma solidity ^0.4.14;
+pragma solidity ^0.4.19;
+
 contract BasicTransaction{
-    mapping (address => uint) public balances;
     
-    event Sent(address from, address to, uint amount);
+    event SenderLog(address);
+    event RecipientLog(address);
+    event ValueLog(uint);
     
-    function send(address receiver, uint amount) {
-        if (balances[msg.sender] < amount) return;
-        balances[msg.sender] -= amount;
-        balances[receiver] += amount;
-        Sent(msg.sender, receiver, amount);
+    function SendEther(address recipient) public payable {
+        SenderLog(msg.sender);
+        ValueLog(msg.value);
+        RecipientLog(recipient);
+        
+        recipient.transfer(msg.value);
     }
     
 }
