@@ -2,11 +2,12 @@ pragma solidity ^0.4.19;
 
 contract RockPaperScissors{
     
+    enum object { Rock, Paper, Scissors}
     
     struct Player {
         address addr;
         uint wager;
-        uint object; // 1 = Rock , 2 = Paper, 3 = Scissors
+        object playerObject; // 1 = Rock , 2 = Paper, 3 = Scissors
     }
     
     
@@ -25,10 +26,10 @@ contract RockPaperScissors{
     event StringDebugger(string debug);
     
     
-    function Play_RPS(uint game_object) public payable{
+    function Play_RPS(object game_object) public payable{
         Game storage RPS = games[0];
         
-        RPS.players[RPS.numPlayers++] = Player({addr: msg.sender, wager: msg.value, object: game_object});
+        RPS.players[RPS.numPlayers++] = Player({addr: msg.sender, wager: msg.value, playerObject: game_object});
         
        // UintDebugger(msg.value);
        // StringDebugger(game_object);
@@ -43,7 +44,7 @@ contract RockPaperScissors{
         if(RPS.numPlayers == 2){
             // Verify the wagers are equal
             if(RPS.players[0].wager == RPS.players[1].wager){
-                if (RPS.players[0].object == 1 && RPS.players[1].object == 2){
+                if (RPS.players[0].playerObject == object.Rock && RPS.players[1].playerObject == object.Paper){
                     //Player two wins
                     RPS.gameCompleted = true;
                     RPS.winnings = RPS.players[0].wager + RPS.players[1].wager;
